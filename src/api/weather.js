@@ -29,6 +29,25 @@ function getWeatherText(code) {
   return weatherTextMap[code] || '未知天气'
 }
 
+function getWeatherType(code) {
+  if ([0, 1].includes(code)) return 'sunny'
+  if ([2, 3, 45, 48].includes(code)) return 'cloudy'
+  if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return 'rain'
+  if ([71, 73, 75].includes(code)) return 'snow'
+  if (code === 95) return 'storm'
+
+  return 'cloudy'
+}
+
+function formatForecastDate(dateString) {
+  const date = new Date(`${dateString}T00:00:00`)
+  return date.toLocaleDateString('zh-CN', {
+    weekday: 'short',
+    month: 'numeric',
+    day: 'numeric'
+  })
+}
+
 // 先通过城市名称获取经纬度，再查询当前天气。
 export async function getCurrentWeather(cityName) {
   const geoResponse = await axios.get(GEO_API_URL, {
@@ -51,17 +70,30 @@ export async function getCurrentWeather(cityName) {
       latitude: city.latitude,
       longitude: city.longitude,
       current: 'temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code',
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min',
+      forecast_days: 7,
       timezone: 'auto'
     }
   })
 
   const current = weatherResponse.data.current
+  const daily = weatherResponse.data.daily || {}
 
   return {
     city: city.admin1 ? `${city.name}, ${city.admin1}` : city.name,
     weather: getWeatherText(current.weather_code),
+    weatherCode: current.weather_code,
+    iconType: getWeatherType(current.weather_code),
     temperature: current.temperature_2m,
     humidity: current.relative_humidity_2m,
-    windSpeed: current.wind_speed_10m
+    windSpeed: current.wind_speed_10m,
+    forecast: (daily.time || []).slice(0, 7).map((date, index) => ({
+      date,
+      label: formatForecastDate(date),
+      weather: getWeatherText(daily.weather_code[index]),
+      iconType: getWeatherType(daily.weather_code[index]),
+      maxTemp: daily.temperature_2m_max[index],
+      minTemp: daily.temperature_2m_min[index]
+    }))
   }
 }

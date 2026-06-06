@@ -2,7 +2,7 @@
   <main class="page">
     <section class="container">
       <header class="page-header">
-        <p class="version">Weather Query V1.0</p>
+        <p class="version">Weather Query V2.0</p>
         <h1>天气查询系统</h1>
       </header>
 
@@ -12,6 +12,7 @@
       <p v-if="errorMessage" class="message error">{{ errorMessage }}</p>
 
       <WeatherCard v-if="weatherInfo" :weather="weatherInfo" />
+      <ForecastList v-if="weatherInfo?.forecast?.length" :forecasts="weatherInfo.forecast" />
     </section>
   </main>
 </template>
@@ -21,6 +22,7 @@ import { ref } from 'vue'
 import { getCurrentWeather } from '../api/weather'
 import SearchBar from '../components/SearchBar.vue'
 import WeatherCard from '../components/WeatherCard.vue'
+import ForecastList from '../components/ForecastList.vue'
 
 const loading = ref(false)
 const errorMessage = ref('')

@@ -2,28 +2,40 @@
   <section class="weather-card">
     <div class="card-header">
       <p class="label">当前城市</p>
-      <h2>{{ weather.city }}</h2>
+      <div class="card-title-row">
+        <h2>{{ weather.city }}</h2>
+        <WeatherIcon :type="weather.iconType || 'cloudy'" :weatherText="weather.weather" />
+      </div>
+      <p class="subtle">实时天气状况 · 由 Open-Meteo 提供</p>
     </div>
 
     <div class="weather-main">
-      <span class="temperature">{{ weather.temperature }}°C</span>
-      <span class="status">{{ weather.weather }}</span>
+      <div>
+        <p class="status-label">当前温度</p>
+        <span class="temperature">{{ weather.temperature }}°C</span>
+      </div>
+      <div class="status-chip">
+        <span class="status-dot"></span>
+        <span class="status">{{ weather.weather }}</span>
+      </div>
     </div>
 
     <div class="weather-details">
-      <div class="detail-item">
+      <article class="detail-item">
         <span class="detail-label">湿度</span>
         <strong>{{ weather.humidity }}%</strong>
-      </div>
-      <div class="detail-item">
+      </article>
+      <article class="detail-item">
         <span class="detail-label">风速</span>
         <strong>{{ weather.windSpeed }} km/h</strong>
-      </div>
+      </article>
     </div>
   </section>
 </template>
 
 <script setup>
+import WeatherIcon from './WeatherIcon.vue'
+
 defineProps({
   weather: {
     type: Object,
@@ -37,8 +49,8 @@ defineProps({
   margin-top: 24px;
   padding: 28px;
   border: 1px solid #e5eaf3;
-  border-radius: 8px;
-  background: #ffffff;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
   box-shadow: 0 18px 45px rgba(31, 41, 55, 0.08);
 }
 
@@ -47,14 +59,24 @@ defineProps({
 }
 
 .label,
-.detail-label {
+.detail-label,
+.status-label,
+.subtle {
   margin: 0;
   color: #667085;
   font-size: 14px;
 }
 
+.card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+
 h2 {
-  margin: 6px 0 0;
+  margin: 0;
   color: #111827;
   font-size: 28px;
   line-height: 1.2;
@@ -65,20 +87,40 @@ h2 {
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #eef2f7;
+  padding: 18px;
+  border: 1px solid #e5ecf8;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
 }
 
 .temperature {
+  display: block;
+  margin-top: 6px;
   color: #2563eb;
   font-size: 52px;
   font-weight: 700;
   line-height: 1;
 }
 
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: #eff6ff;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2563eb;
+}
+
 .status {
   color: #1f2937;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -86,13 +128,14 @@ h2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  margin-top: 22px;
+  margin-top: 18px;
 }
 
 .detail-item {
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 14px;
   background: #f8fafc;
+  border: 1px solid #edf2f7;
 }
 
 .detail-item strong {
@@ -107,6 +150,7 @@ h2 {
     padding: 22px;
   }
 
+  .card-title-row,
   .weather-main {
     align-items: flex-start;
     flex-direction: column;
