@@ -1,11 +1,15 @@
 <template>
   <article class="forecast-card">
-    <p class="forecast-day">{{ forecast.label }}</p>
-    <WeatherIcon :type="forecast.iconType || 'cloudy'" :weatherText="forecast.weather" />
+    <div class="forecast-top">
+      <p class="forecast-day">{{ forecast.dayLabel || forecast.label }}</p>
+      <WeatherIcon :type="forecast.iconType || 'cloudy'" :weatherText="forecast.weather" />
+    </div>
+
     <p class="forecast-weather">{{ forecast.weather }}</p>
+
     <div class="forecast-temp">
-      <span class="temp-pill max">{{ forecast.maxTemp }}°</span>
-      <span class="temp-pill min">{{ forecast.minTemp }}°</span>
+      <span class="temp-pill max">高 {{ forecast.maxTemp }}°</span>
+      <span class="temp-pill min">低 {{ forecast.minTemp }}°</span>
     </div>
   </article>
 </template>
@@ -26,19 +30,27 @@ defineProps({
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 180px;
-  padding: 16px;
+  min-height: 148px;
+  padding: 14px;
   border: 1px solid #e5ecf8;
   border-radius: 18px;
   background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  border-left: 3px solid #bfdbfe;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .forecast-card:hover {
   transform: translateY(-2px);
   border-color: #bfdbfe;
-  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.14);
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.14);
+}
+
+.forecast-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .forecast-day {
@@ -52,13 +64,13 @@ defineProps({
   min-height: 2.6em;
   margin: 0;
   color: #475467;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4;
 }
 
 .forecast-temp {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-top: auto;
 }
@@ -67,10 +79,9 @@ defineProps({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
   padding: 6px 10px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
 }
 

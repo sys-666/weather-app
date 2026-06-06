@@ -41,10 +41,15 @@ function getWeatherType(code) {
 
 function formatForecastDate(dateString) {
   const date = new Date(`${dateString}T00:00:00`)
+  const today = new Date()
+  const isToday = date.toDateString() === today.toDateString()
+
+  if (isToday) {
+    return '今天'
+  }
+
   return date.toLocaleDateString('zh-CN', {
-    weekday: 'short',
-    month: 'numeric',
-    day: 'numeric'
+    weekday: 'short'
   })
 }
 
@@ -90,6 +95,7 @@ export async function getCurrentWeather(cityName) {
     forecast: (daily.time || []).slice(0, 7).map((date, index) => ({
       date,
       label: formatForecastDate(date),
+      dayLabel: formatForecastDate(date),
       weather: getWeatherText(daily.weather_code[index]),
       iconType: getWeatherType(daily.weather_code[index]),
       maxTemp: daily.temperature_2m_max[index],

@@ -49,9 +49,9 @@ defineProps({
   margin-top: 24px;
   padding: 28px;
   border: 1px solid #e5eaf3;
-  border-radius: 18px;
+  border-radius: 24px;
   background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-  box-shadow: 0 18px 45px rgba(31, 41, 55, 0.08);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.10);
 }
 
 .card-header {
@@ -89,7 +89,7 @@ h2 {
   gap: 16px;
   padding: 18px;
   border: 1px solid #e5ecf8;
-  border-radius: 16px;
+  border-radius: 18px;
   background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
 }
 
